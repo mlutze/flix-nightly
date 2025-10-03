@@ -1,0 +1,41 @@
+name: Build and Release Flix
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Daily at midnight UTC
+  workflow_dispatch:
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout flix/flix repository
+        uses: actions/checkout@v4
+        with:
+          repository: flix/flix
+          ref: master
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'gradle'
+
+      - name: Build with Gradle
+        run: ./gradlew build jar
+
+      - name: Update latest release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: latest
+          name: Latest Flix Build
+          body: |
+            Latest automated build of Flix
+            Built on: ${{ github.run_id }}
+            Date: $(date +'%Y-%m-%d %H:%M:%S UTC')
+          files: build/libs/flix.jar
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
