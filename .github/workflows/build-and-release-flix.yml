@@ -1,6 +1,9 @@
 name: Build and Release Flix
 
 on:
+  push:
+    branches:
+      - master
   schedule:
     - cron: '0 0 * * *'  # Daily at midnight UTC
   workflow_dispatch:
