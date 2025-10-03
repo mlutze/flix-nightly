@@ -22,6 +22,10 @@ jobs:
           repository: flix/flix
           ref: master
 
+      - name: Get Flix commit SHA
+        id: flix-sha
+        run: echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
@@ -42,8 +46,8 @@ jobs:
           name: Latest Flix Build
           body: |
             Latest automated build of Flix
-            Built on: ${{ github.run_id }}
-            Date: $(date +'%Y-%m-%d %H:%M:%S UTC')
+            Flix commit: ${{ steps.flix-sha.outputs.sha }}
+            Build date: ${{ github.event.head_commit.timestamp }}
           files: build/libs/flix.jar
           prerelease: false
         env:
