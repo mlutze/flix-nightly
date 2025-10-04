@@ -36,8 +36,8 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew jar
 
-      - name: List build artifacts
-        run: find . -name "*.jar" -type f
+      - name: Check for successful build
+        run: file build/libs/flix.jar
 
       - name: Update latest release
         uses: softprops/action-gh-release@v1
