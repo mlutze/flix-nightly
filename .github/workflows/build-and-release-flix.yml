@@ -33,8 +33,8 @@ jobs:
           java-version: '21'
           cache: 'gradle'
 
-      - name: Build with Gradle
-        run: ./gradlew jar
+      - name: Build with Mill
+        run: ./mill flix.assembly
 
       - name: Check for successful build
         run: file /out/flix/assembly.dest/out.jar
