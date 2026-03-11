@@ -13,6 +13,7 @@ permissions:
 
 env:
   JAR_PATH: out/flix/assembly.dest/out.jar
+  JAR_NAME: flix.jar
 
 jobs:
   build-and-release:
@@ -41,6 +42,9 @@ jobs:
       - name: Check for successful build
         run: file ${{ env.JAR_PATH }}
 
+      - name: Rename jar
+        run: mv ${{ env.JAR_PATH }} ${{ env.JAR_NAME }}
+
       - name: Get build date
         id: build-date
         run: echo "date=$(date '+%B %d, %Y at %H:%M UTC')" >> $GITHUB_OUTPUT
@@ -54,7 +58,7 @@ jobs:
             Latest automated build of Flix
             Flix commit: ${{ steps.flix-sha.outputs.sha }}
             Build date: ${{ steps.build-date.outputs.date }}
-          files: ${{ env.JAR_PATH }}
+          files: ${{ env.JAR_NAME }}
           prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
