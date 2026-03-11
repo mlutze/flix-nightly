@@ -38,6 +38,10 @@ jobs:
       - name: Check for successful build
         run: file /out/flix/assembly.dest/out.jar
 
+      - name: Get build date
+        id: build-date
+        run: echo "date=$(date '+%B %d, %Y at %H:%M UTC')" >> $GITHUB_OUTPUT
+
       - name: Update latest release
         uses: softprops/action-gh-release@v1
         with:
@@ -46,7 +50,7 @@ jobs:
           body: |
             Latest automated build of Flix
             Flix commit: ${{ steps.flix-sha.outputs.sha }}
-            Build date: ${{ github.event.head_commit.timestamp }}
+            Build date: ${{ steps.build-date.outputs.date }}
           files: /out/flix/assembly.dest/out.jar
           prerelease: false
         env:
