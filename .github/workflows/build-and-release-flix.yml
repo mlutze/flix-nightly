@@ -11,6 +11,9 @@ on:
 permissions:
   contents: write
 
+env:
+  JAR_PATH: out/flix/assembly.dest/out.jar
+
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
@@ -36,7 +39,7 @@ jobs:
         run: ./mill flix.assembly
 
       - name: Check for successful build
-        run: file /out/flix/assembly.dest/out.jar
+        run: file ${{ env.JAR_PATH }}
 
       - name: Get build date
         id: build-date
@@ -51,7 +54,7 @@ jobs:
             Latest automated build of Flix
             Flix commit: ${{ steps.flix-sha.outputs.sha }}
             Build date: ${{ steps.build-date.outputs.date }}
-          files: /out/flix/assembly.dest/out.jar
+          files: ${{ env.JAR_PATH }}
           prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
